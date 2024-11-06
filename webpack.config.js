@@ -6,19 +6,8 @@ module.exports = {
     mode: 'development',
     entry: {
         // Main files.
-        index: './src/index.js',
+        index: './src/app.js',
 
-        // Console Application.
-        // projectsBoard: './src/backend/projectsBoard.js',
-
-        // Utility files.
-        // utilityFunctions: './src/resources/utitilityFunctions.js',
-
-        // Frontend files.
-        // loadProjects: './src/frontend/loadProjects.js'
-
-        // Decoupler (Link Btn console app and DOM).
-        // decoupler: './src/front-back-link/decoupler.js',
     },
     devtool: "eval-source-map",
     devServer: {
