@@ -6,7 +6,7 @@ module.exports = {
     mode: 'development',
     entry: {
         // Main files.
-        index: './src/app.js',
+        index: './src/index.js',
 
     },
     devtool: "eval-source-map",
