@@ -1,3 +1,5 @@
+// Object Oriented approach to build a balanaced Binary Search Tree.
+
 class Node {
     constructor(data){
         this.data = data;
@@ -170,7 +172,7 @@ class Tree {
     levelOrderIterative(callback) {
         // Ensure function is called with a callback.
         if (!callback) throw new Error("A callback is required to run this method!");
-        if (typeof callback !== 'function') throw new Error('A callback provided must be a function!');
+        if (typeof callback !== 'function') throw new Error("A callback provided must be a function!");
 
         let rootNode = this.root;
         // Base case if root node is null exit traversal.
@@ -192,7 +194,7 @@ class Tree {
     levelOrderRecursive(callback) {
         // Ensure function is called with a callback.
         if (!callback) throw new Error("A callback is required to run this method!");
-        if (typeof callback !== 'function') throw new Error('A callback provided must be a function!');
+        if (typeof callback !== 'function') throw new Error("A callback provided must be a function!");
     
         // Base case if root node is null exit traversal.
         let currentNode = this.root;
@@ -207,7 +209,7 @@ class Tree {
     }
 
     testCallBack(data) {
-        console.log(data * 2); // logs double the data of the node.
+        console.log(data); // logs the data of the node.
     }
 
     _recursiveLevelOrderTraverser(targetLevel, callback, currentLevel = 0, currentNode = this.root) {
@@ -227,8 +229,8 @@ class Tree {
 
     _treeHeight(currentNode = this.root) {
         if (currentNode === null) return -1;  // Base case for empty node
-        let leftHeight = this._heightHelper(currentNode.left);
-        let rightHeight = this._heightHelper(currentNode.right);
+        let leftHeight = this._treeHeight(currentNode.left);
+        let rightHeight = this._treeHeight(currentNode.right);
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
@@ -256,6 +258,79 @@ class Tree {
     
         return Math.max(leftHeight, rightHeight);
     }  
+
+    inOrder(callback) {
+        if (!callback) throw new Error("A callback is required to run this method!");
+        if (typeof callback !== 'function') throw new Error("A callback provided must be a function!");
+        this._inOrderTraverser(callback);
+    }
+
+    _inOrderTraverser(callback, currentNode = this.root) {
+        // Base case if root is null, return.
+        if (currentNode === null) return;
+
+        if (currentNode.left) this._inOrderTraverser(callback, currentNode.left);
+        callback(currentNode.data);
+        if (currentNode.right) this._inOrderTraverser(callback, currentNode.right);
+    }
+    
+    preOrder(callback) {
+        if (!callback) throw new Error("A callback is required to run this method!");
+        if (typeof callback !== 'function') throw new Error("A callback provided must be a function!");
+        this._preOrderTraverser(callback);
+    }
+
+    _preOrderTraverser(callback, currentNode = this.root) {
+        // Base case if root is null.
+        if (currentNode === null) return;
+
+        // Process root first.
+        callback(currentNode.data);
+
+        // Visit left and right subtrees
+        if (currentNode.left) this._preOrderTraverser(callback, currentNode.left);
+        if (currentNode.right) this._preOrderTraverser(callback, currentNode.right);
+    }
+
+    postOrder(callback) {
+        if (!callback) throw new Error("A callback is required to run this method!");
+        if (typeof callback !== 'function') throw new Error("A callback provided must be a function!");
+        this._postOrderTraverser(callback);
+    }
+
+    _postOrderTraverser(callback, currentNode = this.root) {
+        if (currentNode === null) return;
+        if (currentNode.left) this._postOrderTraverser(callback, currentNode.left);
+        if (currentNode.right) this._postOrderTraverser(callback, currentNode.right);
+        callback(currentNode.data);
+    }
+
+    isBalanced(currentNode = this.root) {
+        if (currentNode === null) return true; // Base case: empty node.
+    
+        let leftHeight = this._treeHeight(currentNode.left);
+        let rightHeight = this._treeHeight(currentNode.right);
+    
+        if (Math.abs(leftHeight - rightHeight) > 1) return false;
+        
+        // Recursively check the balance of the left and right subtrees
+        return this.isBalanced(currentNode.left) && this.isBalanced(currentNode.right);
+    }
+
+    rebalance() {
+        if (this.root === null || this.isBalanced()) return this.root; // return the root if already balanced or empty.
+        
+        let newArray = [];
+        const populateNewArray = (value) => newArray.push(value);
+        
+        // Populate newArray with an in-order traversal
+        this.inOrder(populateNewArray);
+        
+        // Rebuild the tree after sorting and removing duplicates
+        const sortedArray = this.mergeSort(this.removeDuplicate(newArray));
+        this.root = this.buildTree(sortedArray);
+        return this.root;
+    }    
     
 }
 
@@ -275,4 +350,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
   }; 
 
-prettyPrint(testTree);
+// prettyPrint(testTree);
+
+export { Tree, prettyPrint };
